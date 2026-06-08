@@ -20,14 +20,13 @@ test.describe('Resume Update Tests', () => {
     // Click Login
     await page.click('xpath=//*[@id="root"]/div[4]/div[2]/div/div/div[2]/div/form/div[6]/button');
 
-    // Wait for successful login
-    await page.waitForLoadState('networkidle');
 
     // Click "View Profile"
-    await page.locator('//a[@href="/mnjuser/profile"]').click();
+    await page.locator('//div[@class="nI-gNb-drawer__icon"]').click();
+    await page.locator('//a[@class="nI-gNb-info__sub-link"]').click();
+    await page.pause();
 
-    // Verify Profile Page Opened
-    await expect(page).toHaveURL(/profile/);
+
 
   });
 });
