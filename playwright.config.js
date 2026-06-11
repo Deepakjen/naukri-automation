@@ -29,6 +29,19 @@ export default defineConfig({
     /* Base URL to use in actions like `await page.goto('')`. */
     // baseURL: 'http://localhost:3000',
 
+    /* Run browsers in headless mode by default. */
+    headless: true,
+    userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36',
+    viewport: { width: 1920, height: 1080 },
+    locale: 'en-US',
+    timezoneId: 'Asia/Kolkata',
+    extraHTTPHeaders: {
+      'accept-language': 'en-US,en;q=0.9',
+      'sec-ch-ua': '"Google Chrome";v="116", "Chromium";v="116", ";Not A Brand";v="99"',
+      'sec-ch-ua-mobile': '?0',
+      'sec-ch-ua-platform': '"Windows"'
+    },
+
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
   },
@@ -39,9 +52,10 @@ export default defineConfig({
       name: 'chromium',
       use: {
         //...devices['Desktop Chrome'],
-        viewport:null,
-        launchOptions:{
-          args:['--start-maximized']
+        viewport: null,
+        launchOptions: {
+          ignoreDefaultArgs: ['--enable-automation'],
+          args: ['--start-maximized', '--disable-blink-features=AutomationControlled']
         }
       },
     },
