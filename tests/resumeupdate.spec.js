@@ -1,44 +1,31 @@
-import { test, expect } from '@playwright/test';
+import { test } from '@playwright/test';
 import dotenv from 'dotenv';
+
+import { LoginPage } from '../pages/LoginPage';
+import { ProfilePage } from '../pages/ProfilePage';
 
 dotenv.config();
 
-test.describe('Resume Update Tests', () => {
-  test('opens Naukri login layer', async ({ page }) => {
+test.describe('Resume Update', () => {
 
-    // Stealth the browser before navigation to reduce headless detection.
-    await page.addInitScript(() => {
-      Object.defineProperty(navigator, 'webdriver', { get: () => undefined });
-      Object.defineProperty(navigator, 'languages', { get: () => ['en-US', 'en'] });
-      Object.defineProperty(navigator, 'plugins', { get: () => [1, 2, 3, 4, 5] });
-      Object.defineProperty(navigator, 'platform', { get: () => 'Win32' });
-      Object.defineProperty(window, 'chrome', { get: () => ({ runtime: {} }) });
-    });
-    await page.setExtraHTTPHeaders({ 'accept-language': 'en-US,en;q=0.9' });
+    test('TC-01: Verify User Can Update Resume Successfully', async ({ page }) => {
 
-    // Open Naukri
-    await page.goto('https://www.naukri.com/', {
-      waitUntil: 'networkidle'
-    });
+        const loginPage = new LoginPage(page);
+        const profilePage = new ProfilePage(page);
 
-    // Open the login overlay first.
-    await page.locator('#login_Layer').click();
-    await page.locator("(//input[@placeholder='Enter your active Email ID / Username'])[1]").waitFor({
-      state: 'visible'
+        await loginPage.navigate(process.env.URL);
+
+        await loginPage.login(
+            process.env.EMAIL,
+            process.env.PASSWORD
+        );
+
+        await profilePage.openProfile();
+
+        await profilePage.uploadResume(
+            './resume/Deepak_Jena_Test_Engineer.pdf'
+        );
+
     });
 
-    // Enter Email
-    await page.locator("(//input[@placeholder='Enter your active Email ID / Username'])[1]").fill(process.env.EMAIL || '');
-
-    // Enter Password
-    await page.locator("//input[@placeholder='Enter your password']").fill(process.env.PASSWORD || '');
-
-    // Click Login
-    await page.click("//button[normalize-space()='Login']");
-
-    // Click "View Profile"
-    await page.locator('//div[@class="nI-gNb-drawer__icon"]').click();
-    await page.locator('//a[@class="nI-gNb-info__sub-link"]').click();
-
-  });
 });
