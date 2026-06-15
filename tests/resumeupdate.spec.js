@@ -1,8 +1,8 @@
 import { test } from '@playwright/test';
 import dotenv from 'dotenv';
 
-import { LoginPage } from '../pages/LoginPage';
-import { ProfilePage } from '../pages/ProfilePage';
+import { LoginPage } from '../pages/LoginPage.js';
+import { ProfilePage } from '../pages/ProfilePage.js';
 
 dotenv.config();
 
@@ -20,11 +20,22 @@ test.describe('Resume Update', () => {
             process.env.PASSWORD
         );
 
+        // Screenshot after login
+        await page.screenshot({
+            path: 'after-login.png',
+            fullPage: true
+        });
+
         await profilePage.openProfile();
 
         await profilePage.uploadResume(
             './resume/Deepak_Jena_Test_Engineer.pdf'
         );
+
+        await page.screenshot({
+            path: 'after-upload.png',
+            fullPage: true
+        });
 
     });
 

@@ -14,13 +14,20 @@ export class LoginPage {
         });
     }
 
-    async login(email, password) {
-        await this.loginButton.click();
+   async login(email, password) {
 
-        await this.emailTextbox.fill(email);
+    await this.loginButton.click();
 
-        await this.passwordTextbox.fill(password);
+    await this.emailTextbox.fill(email);
 
-        await this.signInButton.click();
+    await this.passwordTextbox.fill(password);
+
+    await this.signInButton.click();
+
+    // Wait for login to complete
+    await this.page.waitForLoadState('networkidle');
+
+    // Extra buffer for cloud execution
+    await this.page.waitForTimeout(5000);
     }
 }
